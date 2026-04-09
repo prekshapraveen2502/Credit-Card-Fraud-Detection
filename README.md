@@ -1,10 +1,5 @@
 # 💳 Credit Card Fraud Detection Using Machine Learning
 
-![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
-![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange?logo=jupyter)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-1.x-green?logo=scikit-learn)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
-
 > **INFO 6105 — Data Science Engineering Methods and Tools**  
 > Team 5 · Hiteshi Kawadia | Preksha Praveen · Northeastern University
 
