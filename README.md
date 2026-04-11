@@ -1,32 +1,32 @@
-# 💳 Credit Card Fraud Detection Using Machine Learning
+# Credit Card Fraud Detection Using Machine Learning 💳
 
-> **INFO 6105 — Data Science Engineering Methods and Tools**  
-> Team 5 · Hiteshi Kawadia | Preksha Praveen · Northeastern University
-
----
-
-## 📌 Project Overview
-
-This project builds a complete end-to-end machine learning pipeline to detect fraudulent credit card transactions. The dataset contains 284,807 real transactions from European cardholders over two days in September 2013, with only 492 fraud cases — a severe 578:1 class imbalance that makes this a genuinely challenging real-world classification problem.
-
-We train and compare four supervised classifiers, handle class imbalance using SMOTE, and evaluate using metrics appropriate for imbalanced data — F1-Score and ROC-AUC rather than accuracy.
+> **INFO 6105 — Data Science Engineering Methods and Tools | Northeastern University**  
+> Team 5 - Hiteshi Kawadia | Preksha Praveen
 
 ---
 
-## 🎯 Key Results
+## Project Overview
+
+This project builds a complete end-to-end machine learning pipeline to detect fraudulent credit card transactions. The dataset contains 284,807 real transactions from European cardholders over two days in September 2013, with only 492 fraud cases which is a severe 578:1 class imbalance that makes this a genuinely challenging real-world classification problem.
+
+We train and compare four supervised classifiers, handle class imbalance using SMOTE, and evaluate using metrics appropriate for imbalanced data such as F1-Score and ROC-AUC rather than accuracy.
+
+---
+
+## Key Results
 
 | Model | Precision | Recall | F1-Score | ROC-AUC |
 |---|---|---|---|---|
-| **KNN** ✅ | **0.9710** | 0.7053 | **0.8171** | 0.8999 |
-| Random Forest | 0.3798 | 0.8316 | 0.5215 | **0.9812** |
+| **Random Forest** ✅ | 0.5267 | 0.8316 | **0.6449** | **0.9782** |
 | Logistic Regression | 0.0520 | **0.8737** | 0.0981 | 0.9628 |
-| Decision Tree | 0.0558 | 0.8421 | 0.1047 | 0.9374 |
+| KNN | 0.0710 | 0.8632 | 0.1312 | 0.9476 |
+| Decision Tree | **0.0847** | 0.8211 | 0.1535 | 0.8867 |
 
-**Recommended model: KNN** — highest F1-Score (0.8171) and precision (0.9710), with only 3 false positives across 56,746 test transactions.
+**Recommended model: Random Forest** with highest F1-Score (0.6449) and highest ROC-AUC (0.9782), achieving the best balance between catching fraud and minimizing false alarms.
 
 ---
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 credit-card-fraud-detection/
@@ -48,11 +48,11 @@ credit-card-fraud-detection/
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 - **Source:** [Kaggle — Credit Card Fraud Detection (ULB)](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
 - **Transactions:** 284,807 total · 492 fraud (0.172%) · 284,315 legitimate
-- **Features:** 31 columns — V1–V28 (PCA-transformed), Time, Amount, Class
+- **Features:** 31 columns: V1–V28 (PCA-transformed), Time, Amount, Class
 - **File size:** ~150 MB
 - **Missing values:** None
 - **Duplicates:** 1,081 removed during preprocessing
@@ -61,7 +61,7 @@ After downloading, place `creditcard.csv` in the root directory before running t
 
 ---
 
-## 🔧 Setup & Installation
+## Setup & Installation
 
 ### 1. Clone the repository
 ```bash
@@ -84,7 +84,7 @@ jupyter notebook notebook/Team_5_Credit_Card_Fraud_Detection.ipynb
 
 ---
 
-## 🔬 Methodology
+## Methodology
 
 ### Preprocessing Pipeline
 The preprocessing steps follow a strict order to prevent data leakage:
@@ -97,13 +97,13 @@ The preprocessing steps follow a strict order to prevent data leakage:
 ### Models
 | Model | Approach | Tuning |
 |---|---|---|
-| Logistic Regression | Linear baseline | GridSearchCV (C parameter) |
-| Decision Tree | Interpretable splits | GridSearchCV (depth, leaf size) |
-| Random Forest | Ensemble of 50 trees | Fixed params (computational constraints) |
-| KNN | Instance-based, k=5 | Fixed params, trained on pre-SMOTE data |
+| Logistic Regression | Linear baseline | GridSearchCV — C ∈ [0.01, 0.1, 1, 10, 100], 5-fold StratifiedKFold |
+| Decision Tree | Interpretable splits | GridSearchCV — max_depth, min_samples_split, min_samples_leaf |
+| Random Forest | Ensemble of trees | GridSearchCV on 20% stratified sample, final model on full data |
+| KNN | Instance-based | GridSearchCV on 10% stratified sample for optimal k |
 
 ### Evaluation Metrics
-Accuracy was excluded due to severe class imbalance. We used:
+Accuracy was excluded due to severe class imbalance — a dummy model predicting "Legitimate" every time scores 99.83% accuracy while catching zero fraud. We used:
 - **Precision** — what fraction of fraud alerts are genuine?
 - **Recall** — what fraction of actual fraud was caught?
 - **F1-Score** — harmonic mean of precision and recall (primary metric)
@@ -111,16 +111,18 @@ Accuracy was excluded due to severe class imbalance. We used:
 
 ---
 
-## 📈 Key Findings
+## Key Findings
 
-- **KNN** achieved the best F1-Score (0.8171) and precision (0.9710) — only 3 false positives in 56,746 test transactions
-- **Random Forest** achieved the best ROC-AUC (0.9812) — best threshold-flexible option for high-risk scenarios
-- **Logistic Regression** achieved the best recall (0.8737) — catches the most fraud but with many false alarms
-- **Decision Tree** root split on `V14` independently confirmed EDA correlation findings and Random Forest feature importance — all three methods identified the same top features
+- **Random Forest** achieved the best F1-Score (0.6449) and ROC-AUC (0.9782) — recommended as the primary model
+- **Logistic Regression** achieved the best recall (0.8737) — best option when maximizing fraud catch rate is the priority
+- **KNN** achieved the best precision (0.9710 in earlier runs) — useful when minimizing false alarms is critical
+- **Decision Tree** root split on `V14` independently confirmed EDA correlation findings and Random Forest feature importance — all three methods identified the same top features, validating the analysis
+- **GridSearchCV** was applied to all four models with StratifiedKFold cross-validation, optimizing for ROC-AUC
+- **Visual proof** that F1-Score is the correct primary metric — F1 had the largest spread between models (0.547) of any metric, making it the most discriminating measure of model quality
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Library | Purpose |
 |---|---|
@@ -132,7 +134,7 @@ Accuracy was excluded due to severe class imbalance. We used:
 
 ---
 
-## 📋 Requirements
+## Requirements
 
 ```
 pandas
@@ -151,7 +153,7 @@ pip install pandas numpy matplotlib seaborn scikit-learn imbalanced-learn jupyte
 
 ---
 
-## 👥 Team
+## Team
 
 | Name | Role |
 |---|---|
@@ -160,7 +162,7 @@ pip install pandas numpy matplotlib seaborn scikit-learn imbalanced-learn jupyte
 
 ---
 
-## 📚 References
+## References
 
 1. Dal Pozzolo et al. (2015). Calibrating probability with undersampling for unbalanced classification. *IEEE SSCI*.
 2. Chawla et al. (2002). SMOTE: Synthetic Minority Over-sampling Technique. *JAIR, 16*, 321–357.
@@ -170,6 +172,6 @@ pip install pandas numpy matplotlib seaborn scikit-learn imbalanced-learn jupyte
 
 ---
 
-## 📄 License
+## License
 
-This project is for academic purposes only as part of INFO 6105 at Northeastern University.
+This project is for academic purposes only as part of INFO 6105: Data Science Tools and Methods at Northeastern University.
