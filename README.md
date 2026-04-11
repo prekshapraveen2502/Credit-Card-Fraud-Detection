@@ -65,7 +65,7 @@ After downloading, place `creditcard.csv` in the root directory before running t
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/credit-card-fraud-detection.git
+git clone https://github.com/prekshapraveen2502/credit-card-fraud-detection.git
 cd credit-card-fraud-detection
 ```
 
@@ -79,7 +79,7 @@ Download `creditcard.csv` from [Kaggle](https://www.kaggle.com/datasets/mlg-ulb/
 
 ### 4. Run the notebook
 ```bash
-jupyter notebook notebook/Team_5_Credit_Card_Fraud_Detection.ipynb
+jupyter notebook notebook/Team 5 Credit Card Fraud_Detection.ipynb
 ```
 
 ---
